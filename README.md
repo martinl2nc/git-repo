@@ -33,6 +33,18 @@ Instrucciones y ejemplos de uso.
 npm start
 ```
 
+
+## Plugins
+
+### Show Post ID
+Este proyecto incluye un plugin personalizado para WordPress ubicado en `show-post-id/`.
+
+**Funcionalidad:** Muestra el ID del post o página actual.
+
+**Uso:**
+Activa el plugin y utiliza el siguiente shortcode en tus entradas o páginas:
+`[show_post_id]`
+
 ## Contribución
 
 Instrucciones para contribuir al proyecto.
