@@ -1,60 +1,48 @@
-# Nombre del Proyecto
+# System Deployment & usage Guide
 
-Mi proyecto de prueba.
+## 1. Environment Setup
 
-## Tabla de Contenidos
+### Prerequisites
+- Python 3.x installed.
+- `pip install pyinstaller requests` (requests is optional if using urllib, but standard lib utilized as requested).
 
--   [Instalación](#instalación)
--   [Uso](#uso)
--   [Contribución](#contribución)
--   [Licencia](#licencia)
+## 2. Compiling the Client (PyInstaller)
+To generate the `.exe` files, run the following commands in your terminal (inside `src/client`):
 
-## Instalación
-
-Instrucciones para instalar el proyecto.
-
-```bash
-# Clonar el repositorio
-git clone https://github.com/usuario/nombre-del-proyecto.git
-
-# Entrar al directorio del proyecto
-cd git-repo
-
-# Instalar dependencias
-npm install
+### Monitor Core (Background Process - Hidden Console)
+```powershell
+pyinstaller --noconsole --onefile monitor_core.py
 ```
 
-## Uso
-
-Instrucciones y ejemplos de uso.
-
-```bash
-# Comando para ejecutar el proyecto
-npm start
+### Start Trigger (User Interface)
+```powershell
+# Optional: Add --noconsole to hide the black window background, assuming you only want the popup.
+pyinstaller --noconsole --onefile iniciar_trabajo.py
 ```
 
+### Stop Trigger (User Interface)
+```powershell
+pyinstaller --noconsole --onefile finalizar_trabajo.py
+```
 
-## Plugins
+*The executables will be located in the `dist` folder.*
 
-### Show Post ID
-Este proyecto incluye un plugin personalizado para WordPress ubicado en `show-post-id/`.
+## 3. Database Setup (Supabase)
+1.  Go to your Supabase Project -> SQL Editor.
+2.  Copy and paste the content of `src/server/schema.sql`.
+3.  Run the query to create tables.
 
-**Funcionalidad:** Muestra el ID del post o página actual.
+## 4. n8n Configuration
+1.  Create a new Workflow in n8n.
+2.  Set up the **Webhook** node (POST, `/webhook/monitor`).
+3.  Use the logic described in `src/server/n8n_workflow.md` or import the provided JSON snippet.
+4.  Configure the **Postgres** node with your Supabase credentials (Host, User, Password, Database).
 
-**Uso:**
-Activa el plugin y utiliza el siguiente shortcode en tus entradas o páginas:
-`[show_post_id]`
-
-## Contribución
-
-Instrucciones para contribuir al proyecto.
-
-1. Hacer un fork del proyecto
-2. Crear una nueva rama (`git checkout -b feature/nueva-funcionalidad`)
-3. Realizar los cambios necesarios y hacer commit (`git commit -am 'Añadir nueva funcionalidad'`)
-4. Hacer push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crear un nuevo Pull Request
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+## 5. Usage
+1.  Employee clicks `iniciar_trabajo.exe`.
+    - Message "✅ Sesión Iniciada" appears.
+    - `monitor_core.exe` starts running in background.
+2.  Work happens... (Data sent every 15 mins).
+3.  Employee clicks `finalizar_trabajo.exe`.
+    - `monitor_core.exe` is killed.
+    - Message "🛑 Sesión Terminada" appears.
