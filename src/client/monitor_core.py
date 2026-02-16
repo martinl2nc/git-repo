@@ -8,8 +8,7 @@ from datetime import datetime
 
 # --- CONFIGURATION ---
 # Replace with your actual n8n webhook URL
-N8N_WEBHOOK_URL = "http://localhost:5678/webhook/monitor" 
-API_KEY = "tu_api_key_secreta"  # Hardcoded or load from env/config
+from config import N8N_WEBHOOK_URL, API_KEY
 BATCH_INTERVAL = 15 * 60  # 15 minutes in seconds
 BUFFER_CHECK_INTERVAL = 1.0 # Check active window every 1 second
 

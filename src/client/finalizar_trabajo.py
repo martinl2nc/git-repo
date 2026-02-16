@@ -6,8 +6,7 @@ import os
 import subprocess
 
 # --- CONFIGURATION ---
-N8N_WEBHOOK_URL = "http://localhost:5678/webhook/monitor" 
-API_KEY = "tu_api_key_secreta"
+from config import N8N_WEBHOOK_URL, API_KEY
 
 def show_message(title, text):
     # MessageBoxW(hwnd, text, title, type)

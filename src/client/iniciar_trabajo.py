@@ -8,8 +8,7 @@ import sys
 
 # --- CONFIGURATION ---
 # Replace with your actual n8n webhook URL
-N8N_WEBHOOK_URL = "http://localhost:5678/webhook/monitor" 
-API_KEY = "tu_api_key_secreta"
+from config import N8N_WEBHOOK_URL, API_KEY
 MONITOR_EXECUTABLE = "monitor_core.exe" # Assumes it's in the same directory
 
 def show_message(title, text):
