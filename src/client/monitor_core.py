@@ -9,7 +9,7 @@ from datetime import datetime
 # --- CONFIGURATION ---
 # Replace with your actual n8n webhook URL
 from config import N8N_WEBHOOK_URL, API_KEY
-BATCH_INTERVAL = 15 * 60  # 15 minutes in seconds
+BATCH_INTERVAL = 2 * 60  # 2 minutes for testing (change to 15 * 60 for production)
 BUFFER_CHECK_INTERVAL = 1.0 # Check active window every 1 second
 
 # --- WIN32 API CONSTANTS & STRUCTURES ---

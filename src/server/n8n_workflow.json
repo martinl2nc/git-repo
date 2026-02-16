@@ -3,6 +3,7 @@
     "nodes": [
         {
             "parameters": {
+                "httpMethod": "POST",
                 "path": "monitor",
                 "responseMode": "lastNode",
                 "options": {}
@@ -18,39 +19,61 @@
         },
         {
             "parameters": {
-                "dataType": "string",
-                "value1": "={{ $json.body.action }}",
-                "rules": {
-                    "rules": [
+                "conditions": {
+                    "string": [
                         {
-                            "value2": "INICIO_JORNADA"
-                        },
-                        {
-                            "value2": "FIN_JORNADA"
+                            "value1": "={{ $json.body.action }}",
+                            "operation": "isNotEmpty"
                         }
                     ]
-                },
-                "fallbackOutput": 1
+                }
             },
-            "name": "Switch",
-            "type": "n8n-nodes-base.switch",
+            "name": "Is Attendance?",
+            "type": "n8n-nodes-base.if",
             "typeVersion": 1,
             "position": [
-                680,
+                660,
                 300
             ]
         },
         {
             "parameters": {
+                "values": {
+                    "string": [
+                        {
+                            "name": "employee_id",
+                            "value": "={{ $json.body.pc_name }}"
+                        },
+                        {
+                            "name": "event_type",
+                            "value": "={{ $json.body.action === 'INICIO_JORNADA' ? 'INICIO' : 'FIN' }}"
+                        }
+                    ]
+                },
+                "options": {
+                    "dotNotation": false
+                }
+            },
+            "name": "Map Attendance",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 1,
+            "position": [
+                880,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "insert",
                 "table": "attendance_log",
-                "columns": "employee_id, event_type, timestamp",
+                "columns": "employee_id, event_type",
                 "options": {}
             },
             "name": "Insert Attendance",
             "type": "n8n-nodes-base.postgres",
             "typeVersion": 1,
             "position": [
-                900,
+                1100,
                 200
             ],
             "credentials": {
@@ -69,22 +92,55 @@
             "type": "n8n-nodes-base.splitInBatches",
             "typeVersion": 1,
             "position": [
-                900,
-                400
+                880,
+                420
             ]
         },
         {
             "parameters": {
+                "values": {
+                    "string": [
+                        {
+                            "name": "employee_id",
+                            "value": "={{ $('Webhook').item.json.body.pc_name }}"
+                        },
+                        {
+                            "name": "window_title",
+                            "value": "={{ $json.window_title }}"
+                        }
+                    ],
+                    "number": [
+                        {
+                            "name": "duration_seconds",
+                            "value": "={{ $json.duration_seconds }}"
+                        }
+                    ]
+                },
+                "options": {
+                    "dotNotation": false
+                }
+            },
+            "name": "Map Activity",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 1,
+            "position": [
+                1060,
+                420
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "insert",
                 "table": "activity_log",
-                "columns": "employee_id, window_title, duration_seconds, created_at",
+                "columns": "employee_id, window_title, duration_seconds",
                 "options": {}
             },
             "name": "Insert Activity",
             "type": "n8n-nodes-base.postgres",
             "typeVersion": 1,
             "position": [
-                1100,
-                400
+                1260,
+                420
             ],
             "credentials": {
                 "postgres": {
@@ -99,18 +155,18 @@
             "main": [
                 [
                     {
-                        "node": "Switch",
+                        "node": "Is Attendance?",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "Switch": {
+        "Is Attendance?": {
             "main": [
                 [
                     {
-                        "node": "Insert Attendance",
+                        "node": "Map Attendance",
                         "type": "main",
                         "index": 0
                     }
@@ -124,7 +180,29 @@
                 ]
             ]
         },
+        "Map Attendance": {
+            "main": [
+                [
+                    {
+                        "node": "Insert Attendance",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
         "SplitOut": {
+            "main": [
+                [
+                    {
+                        "node": "Map Activity",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Map Activity": {
             "main": [
                 [
                     {
