@@ -50,7 +50,12 @@ def main():
 
     # 2. Launch Monitor Core
     # We look for the executable in the same directory as this script is running
-    current_dir = os.path.dirname(os.path.abspath(__file__))
+    # We look for the executable in the same directory as this script is running
+    # Logic to handle PyInstaller --onefile mode
+    if getattr(sys, 'frozen', False):
+        current_dir = os.path.dirname(sys.executable)
+    else:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
     monitor_path = os.path.join(current_dir, MONITOR_EXECUTABLE)
     
     # Check if exe exists, otherwise try .py for development
