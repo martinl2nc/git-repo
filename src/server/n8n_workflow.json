@@ -1,0 +1,139 @@
+{
+    "name": "Productivity Monitor",
+    "nodes": [
+        {
+            "parameters": {
+                "path": "monitor",
+                "responseMode": "lastNode",
+                "options": {}
+            },
+            "name": "Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                460,
+                300
+            ],
+            "webhookId": "monitor-webhook"
+        },
+        {
+            "parameters": {
+                "dataType": "string",
+                "value1": "={{ $json.body.action }}",
+                "rules": {
+                    "rules": [
+                        {
+                            "value2": "INICIO_JORNADA"
+                        },
+                        {
+                            "value2": "FIN_JORNADA"
+                        }
+                    ]
+                },
+                "fallbackOutput": 1
+            },
+            "name": "Switch",
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 1,
+            "position": [
+                680,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "table": "attendance_log",
+                "columns": "employee_id, event_type, timestamp",
+                "options": {}
+            },
+            "name": "Insert Attendance",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                900,
+                200
+            ],
+            "credentials": {
+                "postgres": {
+                    "id": "YOUR_POSTGRES_CREDENTIALS_ID",
+                    "name": "Supabase Account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "body.activities",
+                "options": {}
+            },
+            "name": "SplitOut",
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 1,
+            "position": [
+                900,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "table": "activity_log",
+                "columns": "employee_id, window_title, duration_seconds, created_at",
+                "options": {}
+            },
+            "name": "Insert Activity",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                1100,
+                400
+            ],
+            "credentials": {
+                "postgres": {
+                    "id": "YOUR_POSTGRES_CREDENTIALS_ID",
+                    "name": "Supabase Account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Switch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "Insert Attendance",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "SplitOut",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "SplitOut": {
+            "main": [
+                [
+                    {
+                        "node": "Insert Activity",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}
