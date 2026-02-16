@@ -89,7 +89,7 @@
                 "options": {}
             },
             "name": "SplitOut",
-            "type": "n8n-nodes-base.splitInBatches",
+            "type": "n8n-nodes-base.splitOut",
             "typeVersion": 1,
             "position": [
                 880,
