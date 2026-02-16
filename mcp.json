@@ -8,7 +8,7 @@
             ],
             "env": {
                 "SUPABASE_URL": "https://hmjecisthuzxmczbcksi.supabase.co",
-                "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtamVjaXN0aHV6eG1jemJja3NpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDkzNzk0MiwiZXhwIjoyMDg2NTEzOTQyfQ.PmJFQNpz2ZYK_5vzvjTnrqKb1Nu790Cp3virfx2IhDg"
+                "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtamVjaXN0aHV6eG1jemJja3NpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDkzNzk0MiwiZXhwIjoyMDg2NTEzOTQyfQ.PmJFQNpz2ZYK_5vzvjTnrqKb1Nu790Cp3virfx2IhDg""SUPABASE_ACCESS_TOKEN": "sbp_533b7f0fede2e746b780aace5ce98ecf0397ce71"
             }
         }
     }
