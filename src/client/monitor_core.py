@@ -44,7 +44,7 @@ def send_data(payload):
         print(f"Failed to send data: {e}")
 
 def main():
-    pc_name = socket.gethostname()
+    pc_name = socket.gethostname().upper()
     buffer = {} # Key: Window Title, Value: Duration (seconds)
     last_flush_time = time.time()
     

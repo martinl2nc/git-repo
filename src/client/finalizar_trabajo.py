@@ -36,7 +36,7 @@ def set_status(status):
 def send_webhook(action):
     payload = {
         "action": action,
-        "pc_name": os.getenv('COMPUTERNAME', 'Unknown')
+        "pc_name": os.getenv('COMPUTERNAME', 'Unknown').upper()
     }
     
     req = urllib.request.Request(
